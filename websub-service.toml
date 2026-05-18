@@ -1,13 +1,15 @@
 [kafkaHub.config]
 # Flag to check whether to enable/disable security
-SECURITY_ON = true
+# Changed to false since your Kafka is running without SSL/TLS on port 9092
+SECURITY_ON = false
 
-# Server ID is is used to uniquely identify each server
+# Server ID is used to uniquely identify each server
 # Each server must have a unique ID
 SERVER_ID = "server-1"
 
 # IP and Port of the Kafka bootstrap node
-KAFKA_BOOTSTRAP_NODE = "kafka.mosip.svc.cluster.local:9092"
+# Changed to use the simpler service name without .svc.cluster.local suffix
+KAFKA_BOOTSTRAP_NODE = "kafka.mosip:9092"
 
 # Kafka topic which will get notified for websub topic registration/deregistration
 # All the hubs must be pointed to the same Kafka topic to notify websub topic registration/deregistration
