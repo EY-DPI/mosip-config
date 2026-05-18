@@ -9,7 +9,7 @@ SERVER_ID = "server-1"
 
 # IP and Port of the Kafka bootstrap node
 # Changed to use the simpler service name without .svc.cluster.local suffix
-KAFKA_BOOTSTRAP_NODE = "kafka.mosip.svc.cluster.local"
+KAFKA_BOOTSTRAP_NODE = "kafka-controller-0.kafka-controller-headless.mosip.svc.cluster.local:9092"
 
 # Kafka topic which will get notified for websub topic registration/deregistration
 # All the hubs must be pointed to the same Kafka topic to notify websub topic registration/deregistration
