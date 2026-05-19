@@ -30,6 +30,6 @@ MESSAGE_DELIVERY_COUNT = 3
 # The message delivery timeout
 MESSAGE_DELIVERY_TIMEOUT = 60.0
 # The base URL of IDP
-MOSIP_AUTH_BASE_URL = "${mosip.api.internal.url}/v1/authmanager"
+MOSIP_AUTH_BASE_URL = "http://kernel-authmanager.mosip.svc.cluster.local:80/v1/authmanager"
 # The token validation URL of IDP
 MOSIP_AUTH_VALIDATE_TOKEN_URL = "/authorize/admin/validateToken"
