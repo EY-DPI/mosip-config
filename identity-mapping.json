@@ -116,5 +116,11 @@
         "poe": {
             "value": "proofOfException"
         }
+    },
+    "attributeUpdateCountLimit": {
+        "attributeUpdateCountLimit": {
+            "value": 5
+        }
     }
+    
 }
