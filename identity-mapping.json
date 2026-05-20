@@ -117,5 +117,5 @@
             "value": "proofOfException"
         }
     },
-    "attributeUpdateCountLimit": "{\"individualBiometrics\":5}"   
+    "attributeUpdateCountLimit": {}   
 }
