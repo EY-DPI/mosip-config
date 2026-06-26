@@ -1,6 +1,8 @@
 [kafkaHub.config]
 # Flag to check whether to enable/disable security
 SECURITY_ON = false
+# AES cipher key for encrypting subscriber secrets in Kafka — must be 16, 24, or 32 bytes
+CIPHER_KEY = "mosipwebsubkey1!"
 # Server ID is used to uniquely identify each server
 # Each server must have a unique ID
 SERVER_ID = "server-1"
