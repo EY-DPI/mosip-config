@@ -1,8 +1,8 @@
 <routes xmlns="http://camel.apache.org/schema/spring">
-   <!-- CRVS_NEW: packet-receiver → UIN generator (skip all validation stages) -->
-   <route id="packet-receiver-->uin-generator crvs-new route">
-      <from uri="eventbus://packet-receiver-crvs-new-bus-out" />
-      <log message="packet-receiver-->uin-generator crvs-new ${bodyAs(String)}" />
+   <!-- CRVS_NEW: packet-validator → UIN generator (skip dedupe/bio stages) -->
+   <route id="packet-validator-->uin-generator crvs-new route">
+      <from uri="eventbus://packet-validator-crvs-new-bus-out" />
+      <log message="packet-validator-->uin-generator crvs-new ${bodyAs(String)}" />
       <choice>
          <when>
             <jsonpath>$.[?(@['isValid'] == false &amp;&amp; @['internalError'] == true)]</jsonpath>
