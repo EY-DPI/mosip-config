@@ -1,0 +1,93 @@
+<routes xmlns="http://camel.apache.org/schema/spring">
+   <!-- CRVS_NEW: packet-receiver → UIN generator (skip all validation stages) -->
+   <route id="packet-receiver-->uin-generator crvs-new route">
+      <from uri="eventbus://packet-receiver-crvs-new-bus-out" />
+      <log message="packet-receiver-->uin-generator crvs-new ${bodyAs(String)}" />
+      <choice>
+         <when>
+            <jsonpath>$.[?(@['isValid'] == false &amp;&amp; @['internalError'] == true)]</jsonpath>
+            <to uri="workflow-cmd://complete-as-failed" />
+         </when>
+         <when>
+            <jsonpath>$.[?(@['isValid'] == true &amp;&amp; @['internalError'] == true)]</jsonpath>
+            <to uri="workflow-cmd://mark-as-reprocess" />
+         </when>
+         <when>
+            <jsonpath>$.[?(@['isValid'] == false &amp;&amp; @['internalError'] == false)]</jsonpath>
+            <to uri="workflow-cmd://complete-as-failed" />
+         </when>
+         <otherwise>
+            <to uri="eventbus://uin-generator-bus-in" />
+         </otherwise>
+      </choice>
+   </route>
+
+   <!-- UIN generator → finalization (skip biometric-extraction — no biometrics in CRVS packet) -->
+   <route id="uin-generator-->finalization crvs-new route">
+      <from uri="eventbus://uin-generator-crvs-new-bus-out" />
+      <log message="uin-generator-->finalization crvs-new ${bodyAs(String)}" />
+      <choice>
+         <when>
+            <jsonpath>$.[?(@['isValid'] == false &amp;&amp; @['internalError'] == true)]</jsonpath>
+            <to uri="workflow-cmd://complete-as-failed" />
+         </when>
+         <when>
+            <jsonpath>$.[?(@['isValid'] == true &amp;&amp; @['internalError'] == true)]</jsonpath>
+            <to uri="workflow-cmd://mark-as-reprocess" />
+         </when>
+         <when>
+            <jsonpath>$.[?(@['isValid'] == false &amp;&amp; @['internalError'] == false)]</jsonpath>
+            <to uri="workflow-cmd://complete-as-failed" />
+         </when>
+         <otherwise>
+            <to uri="eventbus://finalization-bus-in" />
+         </otherwise>
+      </choice>
+   </route>
+
+   <!-- finalization → credential-requestor -->
+   <route id="finalization-->credential-requestor crvs-new route">
+      <from uri="eventbus://finalization-crvs-new-bus-out" />
+      <log message="finalization-->credential-requestor crvs-new ${bodyAs(String)}" />
+      <choice>
+         <when>
+            <jsonpath>$.[?(@['isValid'] == false &amp;&amp; @['internalError'] == true)]</jsonpath>
+            <to uri="workflow-cmd://complete-as-failed" />
+         </when>
+         <when>
+            <jsonpath>$.[?(@['isValid'] == true &amp;&amp; @['internalError'] == true)]</jsonpath>
+            <to uri="workflow-cmd://mark-as-reprocess" />
+         </when>
+         <when>
+            <jsonpath>$.[?(@['isValid'] == false &amp;&amp; @['internalError'] == false)]</jsonpath>
+            <to uri="workflow-cmd://complete-as-failed" />
+         </when>
+         <otherwise>
+            <to uri="eventbus://credential-requestor-bus-in" />
+         </otherwise>
+      </choice>
+   </route>
+
+   <!-- credential-requestor → complete -->
+   <route id="credential-requestor crvs-new route">
+      <from uri="eventbus://credential-requestor-crvs-new-bus-out" />
+      <log message="credential-requestor crvs-new ${bodyAs(String)}" />
+      <choice>
+         <when>
+            <jsonpath>$.[?(@['isValid'] == false &amp;&amp; @['internalError'] == true)]</jsonpath>
+            <to uri="workflow-cmd://complete-as-failed" />
+         </when>
+         <when>
+            <jsonpath>$.[?(@['isValid'] == true &amp;&amp; @['internalError'] == true)]</jsonpath>
+            <to uri="workflow-cmd://mark-as-reprocess" />
+         </when>
+         <when>
+            <jsonpath>$.[?(@['isValid'] == false &amp;&amp; @['internalError'] == false)]</jsonpath>
+            <to uri="workflow-cmd://complete-as-failed" />
+         </when>
+         <otherwise>
+            <to uri="workflow-cmd://complete-as-processed" />
+         </otherwise>
+      </choice>
+   </route>
+</routes>
