@@ -1,8 +1,15 @@
 [kafkaHub.config]
 # Flag to check whether to enable/disable security
 SECURITY_ON = false
-# Original default key - fromBase64 decodes to 32 bytes (AES-256), passes validateConfigs
-HUB_SECRET_ENCRYPTION_KEY = "KsOY5Pri6fOkaOdn4q+gpNEmsFAPTE5FxMoWwLXgXvM="
+# Hub 1.2.0.1 asymmetry bug (confirmed from bytecode): encrypt honors
+# HUB_SECRET_ENCRYPTION_KEY_FORMAT (fromBase64 vs toBytes) but decrypt in the
+# subscriber-cache sync ALWAYS uses raw key.toBytes(). With the default
+# "base64-encoded-bytes" format the two paths use different key bytes, so the
+# sync crashes with "Invalid key size" and NO delivery consumers ever start.
+# Fix: plain-text format + a key of EXACTLY 32 ASCII chars so both paths use
+# the same 32 raw bytes (AES-256).
+HUB_SECRET_ENCRYPTION_KEY = "EYDPIPoc2026WebSubHubSecretKey32"
+HUB_SECRET_ENCRYPTION_KEY_FORMAT = "plain-text"
 # Server ID is used to uniquely identify each server
 # Each server must have a unique ID
 SERVER_ID = "server-1"
